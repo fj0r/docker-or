@@ -8,6 +8,7 @@ ARG just_repo=casey/just
 ARG watchexec_repo=watchexec/watchexec
 ARG yq_repo=mikefarah/yq
 ARG websocat_repo=vi/websocat
+ARG pup_repo=ericchiang/pup
 ARG wasmtime_repo=bytecodealliance/wasmtime
 ARG s6overlay_repo=just-containers/s6-overlay
 
@@ -79,6 +80,9 @@ RUN set -eux \
   ; wasmtime_url=https://github.com/${wasmtime_repo}/releases/download/${wasmtime_version}/wasmtime-${wasmtime_version}-x86_64-linux.tar.xz \
   ; wget -O- ${wasmtime_url} | tar Jxf - --strip-components=1 -C /usr/local/bin \
     wasmtime-${wasmtime_version}-x86_64-linux/wasmtime \
+  ; pup_version=$(curl -sSL -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${pup_repo}/releases | jq -r '.[0].tag_name') \
+  ; pup_url=https://github.com/ericchiang/pup/releases/download/${pup_version}/pup_${pup_version}_linux_amd64.zip \
+  ; wget -O pup.zip ${pup_url} && unzip pup.zip && rm -f pup.zip && chmod +x pup && mv pup /usr/local/bin/ \
   \
   ; s6overlay_version=$(curl -sSL -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${s6overlay_repo}/releases | jq -r '.[0].tag_name') \
   ; s6overlay_url=https://github.com/${s6overlay_repo}/releases/download/${s6overlay_version}/s6-overlay-amd64.tar.gz \
