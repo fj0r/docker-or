@@ -76,7 +76,7 @@ RUN set -eux \
   ; websocat_url=https://github.com/${websocat_repo}/releases/download/${websocat_version}/websocat_amd64-linux-static \
   ; wget -q -O /usr/local/bin/websocat ${websocat_url} \
     ; chmod +x /usr/local/bin/websocat \
-  ; wasmtime_version=$(curl -sSL -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${wasmtime_repo}/releases | jq -r '.[0].tag_name') \
+  ; wasmtime_version=$(curl -sSL -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${wasmtime_repo}/releases | jq -r '[.[]|select(.prerelease == false)][0].tag_name') \
   ; wasmtime_url=https://github.com/${wasmtime_repo}/releases/download/${wasmtime_version}/wasmtime-${wasmtime_version}-x86_64-linux.tar.xz \
   ; wget -O- ${wasmtime_url} | tar Jxf - --strip-components=1 -C /usr/local/bin \
     wasmtime-${wasmtime_version}-x86_64-linux/wasmtime \
