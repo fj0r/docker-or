@@ -20,7 +20,7 @@ ENV DEV_DEPS \
         python3 python3-pip python3-setuptools \
         gnupg openssh-server openssh-client \
         pwgen curl rsync wget tcpdump socat \
-        sudo procps tree unzip xz-utils zstd \
+        sudo htop procps tree unzip xz-utils zstd \
         iproute2 net-tools inetutils-ping iptables
 
 ENV PYTHONUNBUFFERED=x
