@@ -59,13 +59,3 @@ ssh websocat
           secretName: pubkey
 ```
 
-### unison
-```bash
-unison -auto -batch -repeat watch \
-    -ignore "Path .git" \
-    -ignore "Path .gitignore" \
-    -ignore "Path .gitattributes" \
-    -ignore "Path var/cache" \
-    . ssh://websocat//srv
-
-```
