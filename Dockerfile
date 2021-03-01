@@ -41,7 +41,7 @@ RUN set -eux \
   ; nvim_version=$(curl -sSL -H "'$github_header'" $github_api/${nvim_repo}/releases | jq -r '.[0].tag_name') \
   ; nvim_url=https://github.com/${nvim_repo}/releases/download/${nvim_version}/nvim-linux64.tar.gz \
   ; curl -sSL ${nvim_url} | tar zxf - -C /usr/local --strip-components=1 \
-  ; pip3 --no-cache-dir install neovim neovim-remote \
+  ; pip3 --no-cache-dir install neovim neovim-remote invoke \
   \
   ; sed -i 's/^.*\(%sudo.*\)ALL$/\1NOPASSWD:ALL/g' /etc/sudoers \
   ; ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime \
