@@ -110,10 +110,11 @@ RUN set -eux \
   ; rm -rf $nvim_home/plugged/*/.git \
   ; for x in $(cat $nvim_home/coc-core-extensions) \
   ; do nvim -u $nvim_home/init.vim --headless +"CocInstall -sync coc-$x" +qa; done \
-  ; mv $nvim_home/coc-data /opt && chmod -R 777 /opt/coc-data \
-  ; ln -sf /opt/coc-data $nvim_home \
-  ; mv $nvim_home/plugged /opt \
-  ; ln -sf /opt/plugged $nvim_home \
+  ; mkdir -p /opt/vim \
+  ; mv $nvim_home/coc-data /opt/vim && chmod -R 777 /opt/vim/coc-data \
+  ; ln -sf /opt/vim/coc-data $nvim_home \
+  ; mv $nvim_home/plugged /opt/vim \
+  ; ln -sf /opt/vim/plugged $nvim_home \
   ; coc_lua_bin_repo=josa42/coc-lua-binaries \
   ; lua_ls_version=$(curl -sSL -H "'$github_header'" $github_api/${coc_lua_bin_repo}/releases | jq -r '.[0].tag_name') \
   ; lua_ls_url=https://github.com/${coc_lua_bin_repo}/releases/download/${lua_ls_version}/lua-language-server-linux.tar.gz \
