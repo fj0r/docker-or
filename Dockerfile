@@ -23,7 +23,13 @@ ENV DEV_DEPS \
         sudo htop procps tree unzip xz-utils zstd \
         iproute2 net-tools inetutils-ping iptables
 
+ENV BUILD_DEPS \
+		libpcre3-dev libssl-dev libpq-dev \
+		perl make build-essential
+
+ENV PATH=/opt/openresty/bin:$PATH
 ENV PYTHONUNBUFFERED=x
+ENV OPENRESTY_VERSION=1.19.3.1
 
 RUN set -eux \
   ; apt-get update \
@@ -34,6 +40,7 @@ RUN set -eux \
     tzdata \
     locales \
     $DEV_DEPS \
+    $BUILD_DEPS \
   \
   ; curl -sL https://deb.nodesource.com/setup_14.x | bash - \
   ; apt-get install -y --no-install-recommends nodejs \
@@ -57,15 +64,19 @@ RUN set -eux \
         -e 's!.*\(GatewayPorts\).*!\1 yes!' \
         -e 's!.*\(PasswordAuthentication\).*yes!\1 no!' \
   \
-  ; apt-get -y install --no-install-recommends software-properties-common \
-  ; wget -qO- https://openresty.org/package/pubkey.gpg | apt-key add - \
-  ; echo "deb http://openresty.org/package/debian sid openresty" \
-      | tee /etc/apt/sources.list.d/openresty.list \
-  ; apt-get update \
-  ; apt-get -y install --no-install-recommends openresty openresty-opm \
-  ; opm install ledgetech/lua-resty-http \
+  ; wget -qO- https://openresty.org/download/openresty-${OPENRESTY_VERSION}.tar.gz | tar -zxf - \
+  ; cd openresty-${OPENRESTY_VERSION} \
+  ; ./configure --prefix=/opt/openresty \
+		--with-luajit \
+		--with-mail \
+        --with-http_iconv_module \
+        --with-http_postgres_module \
+  ; make \
+  ; make install \
+  ; cd .. && rm -rf openresty-${OPENRESTY_VERSION} \
+- ; opm install ledgetech/lua-resty-http \
+  ; ln -fs /opt/openresty/nginx/conf /etc/openresty \
   ; mkdir -p /etc/openresty/conf.d \
-  ; apt-get -y remove software-properties-common \
   \
   ; rg_version=$(curl -sSL -H "'$github_header'" $github_api/${rg_repo}/releases | jq -r '.[0].tag_name') \
   ; rg_url=https://github.com/${rg_repo}/releases/download/${rg_version}/ripgrep-${rg_version}-x86_64-unknown-linux-musl.tar.gz \
