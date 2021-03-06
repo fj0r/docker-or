@@ -2,6 +2,7 @@ FROM debian:sid-slim
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 TIMEZONE=Asia/Shanghai
 
+ARG openresty_repo=openresty/openresty
 ARG nvim_repo=neovim/neovim
 ARG wasmtime_repo=bytecodealliance/wasmtime
 ARG just_repo=casey/just
@@ -29,7 +30,6 @@ ENV BUILD_DEPS \
 
 ENV PATH=/opt/openresty/bin:$PATH
 ENV PYTHONUNBUFFERED=x
-ENV OPENRESTY_VERSION=1.19.3.1
 
 RUN set -eux \
   ; apt-get update \
@@ -64,6 +64,8 @@ RUN set -eux \
         -e 's!.*\(GatewayPorts\).*!\1 yes!' \
         -e 's!.*\(PasswordAuthentication\).*yes!\1 no!' \
   \
+  ; OPENRESTY_VERSION=1.19.3.1 \
+  #; OPENRESTY_VERSION=$(curl -sSL -H "'$github_header'" $github_api/${openresty_repo}/releases | jq -r '.[0].tag_name' | cut -c 2-) \
   ; wget -qO- https://openresty.org/download/openresty-${OPENRESTY_VERSION}.tar.gz | tar -zxf - \
   ; cd openresty-${OPENRESTY_VERSION} \
   ; ./configure --prefix=/opt/openresty \
