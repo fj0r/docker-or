@@ -26,7 +26,7 @@ ENV DEV_DEPS \
 
 ENV BUILD_DEPS \
 		libpcre3-dev libssl-dev libpq-dev \
-		perl make build-essential
+		zlib1g-dev build-essential
 
 ENV PATH=/opt/openresty/bin:$PATH
 ENV PYTHONUNBUFFERED=x
