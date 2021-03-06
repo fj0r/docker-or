@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM debian:sid-slim
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 TIMEZONE=Asia/Shanghai
 
@@ -57,13 +57,15 @@ RUN set -eux \
         -e 's!.*\(GatewayPorts\).*!\1 yes!' \
         -e 's!.*\(PasswordAuthentication\).*yes!\1 no!' \
   \
+  ; apt-get -y install --no-install-recommends software-properties-common \
   ; wget -qO- https://openresty.org/package/pubkey.gpg | apt-key add - \
-  ; echo "deb http://openresty.org/package/ubuntu focal main" \
+  ; echo "deb http://openresty.org/package/debian sid openresty" \
       | tee /etc/apt/sources.list.d/openresty.list \
   ; apt-get update \
   ; apt-get -y install --no-install-recommends openresty openresty-opm \
   ; opm install ledgetech/lua-resty-http \
   ; mkdir -p /etc/openresty/conf.d \
+  ; apt-get -y remove software-properties-common \
   \
   ; rg_version=$(curl -sSL -H "'$github_header'" $github_api/${rg_repo}/releases | jq -r '.[0].tag_name') \
   ; rg_url=https://github.com/${rg_repo}/releases/download/${rg_version}/ripgrep-${rg_version}-x86_64-unknown-linux-musl.tar.gz \
@@ -89,10 +91,8 @@ RUN set -eux \
   \
   ; s6overlay_version=$(curl -sSL -H "'$github_header'" $github_api/${s6overlay_repo}/releases | jq -r '.[0].tag_name') \
   ; s6overlay_url=https://github.com/${s6overlay_repo}/releases/download/${s6overlay_version}/s6-overlay-amd64.tar.gz \
-  ; curl --fail --silent -L ${s6overlay_url} > /tmp/s6overlay.tar.gz \
-  ; tar xzf /tmp/s6overlay.tar.gz -C / --exclude="./bin" \
-  ; tar xzf /tmp/s6overlay.tar.gz -C /usr ./bin \
-  ; rm -f /tmp/s6overlay.tar.gz \
+  ; curl --fail --silent -L ${s6overlay_url} \
+    | tar xzvf - -C / \
   \
   ; apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
