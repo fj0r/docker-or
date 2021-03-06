@@ -22,11 +22,10 @@ ENV DEV_DEPS \
         gnupg openssh-server openssh-client \
         pwgen curl rsync wget tcpdump socat \
         sudo htop procps tree unzip xz-utils zstd \
-        iproute2 net-tools inetutils-ping iptables
+        iproute2 net-tools inetutils-ping iptables \
+		libpcre3-dev libssl-dev libpq-dev zlib1g-dev
 
-ENV BUILD_DEPS \
-		libpcre3-dev libssl-dev libpq-dev \
-		zlib1g-dev build-essential
+ENV BUILD_DEPS software-properties-common build-essential
 
 ENV PATH=/opt/openresty/bin:$PATH
 ENV PYTHONUNBUFFERED=x
@@ -76,6 +75,7 @@ RUN set -eux \
   ; make \
   ; make install \
   ; cd .. && rm -rf openresty-${OPENRESTY_VERSION} \
+  ; apt-get -y remove ${BUILD_DEPS} \
 - ; opm install ledgetech/lua-resty-http \
   ; ln -fs /opt/openresty/nginx/conf /etc/openresty \
   ; mkdir -p /etc/openresty/conf.d \
