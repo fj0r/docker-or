@@ -18,9 +18,9 @@ ARG github_header="Accept: application/vnd.github.v3+json"
 ARG github_api=https://api.github.com/repos
 
 ENV DEV_DEPS \
-        zsh git mlocate jq \
+        zsh git jq luarocks \
         python3 python3-pip python3-setuptools \
-        gnupg openssh-server openssh-client \
+        openssh-server openssh-client \
         pwgen curl rsync wget tcpdump socat \
         sudo htop procps tree unzip xz-utils zstd \
         iproute2 net-tools inetutils-ping iptables \
@@ -82,6 +82,8 @@ RUN set -eux \
   ; cd .. && rm -rf openresty-${OPENRESTY_VERSION} nchan-${NCHAN_VERSION} \
   ; apt-get -y remove ${BUILD_DEPS} \
   ; opm install ledgetech/lua-resty-http \
+  ; opm install SkyLothar/lua-resty-jwt \
+  #; opm install duhoobo/lua-resty-smtp \
   ; ln -fs /opt/openresty/nginx/conf /etc/openresty \
   ; mkdir -p /etc/openresty/conf.d \
   \
