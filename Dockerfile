@@ -3,6 +3,7 @@ FROM debian:sid-slim
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 TIMEZONE=Asia/Shanghai
 
 ARG openresty_repo=openresty/openresty
+ARG nchan_repo=slact/nchan
 ARG nvim_repo=neovim/neovim
 ARG wasmtime_repo=bytecodealliance/wasmtime
 ARG just_repo=casey/just
@@ -23,7 +24,7 @@ ENV DEV_DEPS \
         pwgen curl rsync wget tcpdump socat \
         sudo htop procps tree unzip xz-utils zstd \
         iproute2 net-tools inetutils-ping iptables \
-		libpcre3-dev libssl-dev libpq-dev zlib1g-dev
+        libpcre3-dev libssl-dev libpq-dev zlib1g-dev
 
 ENV BUILD_DEPS software-properties-common build-essential
 
@@ -65,18 +66,22 @@ RUN set -eux \
   \
   ; OPENRESTY_VERSION=1.19.3.1 \
   #; OPENRESTY_VERSION=$(curl -sSL -H "'$github_header'" $github_api/${openresty_repo}/releases | jq -r '.[0].tag_name' | cut -c 2-) \
+  ; NCHAN_VERSION=1.2.7 \
+  #; NCHAN_VERSION=$(curl -sSL -H "'$github_header'" $github_api/${nchan_repo}/releases | jq -r '.[0].tag_name' | cut -c 2-) \
   ; wget -qO- https://openresty.org/download/openresty-${OPENRESTY_VERSION}.tar.gz | tar -zxf - \
+  ; wget -qO- https://github.com/slact/nchan/archive/v${NCHAN_VERSION}.tar.gz | tar -zxf - \
   ; cd openresty-${OPENRESTY_VERSION} \
   ; ./configure --prefix=/opt/openresty \
-		--with-luajit \
-		--with-mail \
+        --with-luajit \
+        --with-mail \
         --with-http_iconv_module \
         --with-http_postgres_module \
+        --add-dynamic-module=../nchan-${NCHAN_VERSION} \
   ; make \
   ; make install \
-  ; cd .. && rm -rf openresty-${OPENRESTY_VERSION} \
+  ; cd .. && rm -rf openresty-${OPENRESTY_VERSION} nchan-${NCHAN_VERSION} \
   ; apt-get -y remove ${BUILD_DEPS} \
-- ; opm install ledgetech/lua-resty-http \
+  ; opm install ledgetech/lua-resty-http \
   ; ln -fs /opt/openresty/nginx/conf /etc/openresty \
   ; mkdir -p /etc/openresty/conf.d \
   \
