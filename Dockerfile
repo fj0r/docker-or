@@ -70,16 +70,19 @@ RUN set -eux \
   #; NCHAN_VERSION=$(curl -sSL -H "'$github_header'" $github_api/${nchan_repo}/releases | jq -r '.[0].tag_name' | cut -c 2-) \
   ; wget -qO- https://openresty.org/download/openresty-${OPENRESTY_VERSION}.tar.gz | tar -zxf - \
   ; wget -qO- https://github.com/slact/nchan/archive/v${NCHAN_VERSION}.tar.gz | tar -zxf - \
+  ; wget -qO nchan.zip https://github.com/slact/nchan/archive/master.zip \
+  ; unzip nchan.zip \
   ; cd openresty-${OPENRESTY_VERSION} \
   ; ./configure --prefix=/opt/openresty \
         --with-luajit \
         --with-mail \
         --with-http_iconv_module \
         --with-http_postgres_module \
-        --add-dynamic-module=../nchan-${NCHAN_VERSION} \
+        --add-dynamic-module=../nchan-master \
   ; make \
   ; make install \
   ; cd .. && rm -rf openresty-${OPENRESTY_VERSION} nchan-${NCHAN_VERSION} \
+  ; rm -rf nchan-master nchan.zip \
   ; apt-get -y remove ${BUILD_DEPS} \
   ; opm install ledgetech/lua-resty-http \
   ; opm install SkyLothar/lua-resty-jwt \
