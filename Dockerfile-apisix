@@ -92,6 +92,7 @@ RUN set -eux \
         --with-http_stub_status_module \
         --with-http_realip_module \
         --with-stream_realip_module \
+        --with-http_v2_module \
         --add-dynamic-module=../nchan-master \
   ; make \
   ; make install \
@@ -107,7 +108,7 @@ RUN set -eux \
   ; mkdir -p /opt/apisix && cd /opt/apisix \
   ; wget -qO- https://downloads.apache.org/apisix/2.4/apache-apisix-2.4-src.tgz | tar -zxf - \
   ; make deps \
-  ; yq --inplace e '.etcd.host[0]="http://${{ETCD_HOST}}"' /opt/apisix/conf/config.yaml \
+  ; yq --inplace e '.etcd.host[0]="http://${{ETCD_HOST}}"|.etcd.host[] style="double"' /opt/apisix/conf/config.yaml \
   \
   ; apt-get -y remove ${BUILD_DEPS} \
   ; apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
