@@ -2,4 +2,4 @@
 echo >&2 "starting watcher"
 
 sleep 2
-exec watchexec -r -p -w /etc/openresty -- reload-nginx 2>&1
+exec watchexec -r -p -w /opt/apisix/config -- /opt/apisix/bin/apisix reload 2>&1

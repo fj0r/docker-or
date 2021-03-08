@@ -15,7 +15,7 @@ ARG github_header="Accept: application/vnd.github.v3+json"
 ARG github_api=https://api.github.com/repos
 
 ENV DEV_DEPS \
-        zsh git jq luarocks \
+        zsh git jq luarocks lsof \
         python3 python3-pip python3-setuptools \
         pwgen curl rsync wget tcpdump socat \
         sudo htop procps tree unzip xz-utils zstd \
@@ -105,10 +105,10 @@ RUN set -eux \
   ; ln -fs /opt/openresty/nginx/conf /etc/openresty \
   ; mkdir -p /etc/openresty/conf.d \
   \
-  ; mkdir -p /usr/local/apisix && cd /usr/local/apisix \
+  ; mkdir -p /opt/apisix && cd /opt/apisix \
   ; wget -qO- https://downloads.apache.org/apisix/2.4/apache-apisix-2.4-src.tgz | tar -zxf - \
   ; make deps \
-  ; yq --inplace e '.etcd.host[0]="http://${{ETCD_HOST}}"|.etcd.host[] style="double"' /usr/local/apisix/conf/config.yaml \
+  ; yq --inplace e '.etcd.host[0]="http://${{ETCD_HOST}}"|.etcd.host[] style="double"' /opt/apisix/conf/config.yaml \
   \
   ; apt-get -y remove ${BUILD_DEPS} \
   ; apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
