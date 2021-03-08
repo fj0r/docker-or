@@ -86,6 +86,7 @@ RUN set -eux \
   ; apt-get -y remove ${BUILD_DEPS} \
   ; opm install ledgetech/lua-resty-http \
   ; opm install SkyLothar/lua-resty-jwt \
+  ; opm install fffonion/lua-resty-acme \
   #; opm install duhoobo/lua-resty-smtp \
   ; ln -fs /opt/openresty/nginx/conf /etc/openresty \
   ; mkdir -p /etc/openresty/conf.d \
