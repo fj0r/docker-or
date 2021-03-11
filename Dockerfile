@@ -22,7 +22,7 @@ ENV DEV_DEPS \
         python3 python3-pip python3-setuptools \
         openssh-server openssh-client \
         pwgen curl rsync wget tcpdump socat \
-        sudo htop procps tree unzip xz-utils zstd \
+        sudo htop procps tree zip unzip xz-utils zstd \
         iproute2 net-tools inetutils-ping iptables \
         libpcre3-dev libssl-dev libpq-dev zlib1g-dev
 
