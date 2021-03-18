@@ -172,7 +172,7 @@ COPY auto-ssl.conf /etc/openresty
 WORKDIR /srv
 
 VOLUME [ "/srv" ]
-EXPOSE 80
+EXPOSE 80 443
 
 ENTRYPOINT [ "/init" ]
 

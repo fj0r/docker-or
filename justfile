@@ -22,5 +22,6 @@ or:
         -v $PWD/openresty/logs:/opt/openresty/nginx/logs \
         -v $PWD/openresty/auto-ssl.conf:/etc/openresty/auto_ssl.conf \
         -v $PWD/openresty/ssl:/etc/resty-auto-ssl \
-        --network=host \
+        -p 80:80 \
+        -p 443:443 \
         nnurphy/or
