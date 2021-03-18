@@ -112,10 +112,8 @@ RUN set -eux \
         -keyout /etc/ssl/resty-auto-ssl-fallback.key \
         -out /etc/ssl/resty-auto-ssl-fallback.crt \
   \
-  ; mkdir -p /opt/apisix && cd /opt/apisix \
-  ; wget -qO- https://downloads.apache.org/apisix/2.4/apache-apisix-2.4-src.tgz | tar -zxf - \
-  ; make deps \
-  ; yq --inplace e '.etcd.host[0]="http://${{ETCD_HOST}}"|.etcd.host[] style="double"' /opt/apisix/conf/config.yaml \
+  ; luarocks install apisix \
+  #; yq --inplace e '.etcd.host[0]="http://${{ETCD_HOST}}"|.etcd.host[] style="double"' /opt/apisix/conf/config.yaml \
   \
   ; apt-get -y remove ${BUILD_DEPS} \
   ; apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
