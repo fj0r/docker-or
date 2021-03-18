@@ -12,3 +12,14 @@ test tag="latest":
         nnurphy/or
 
 #-v $PWD/nginx-site.conf:/etc/openresty/conf.d/default.conf \
+
+or:
+    docker run -d --name=or --restart=always \
+        -v $PWD/pub:/srv \
+        -v $PWD/openresty/nginx.conf:/etc/openresty/nginx.conf \
+        -v $PWD/openresty/conf.d:/etc/openresty/conf.d \
+        -v $PWD/openresty/logs:/opt/openresty/nginx/logs \
+        -v $PWD/openresty/ssl:/etc/resty-auto-ssl \
+        --network=host \
+        nnurphy/or
+
