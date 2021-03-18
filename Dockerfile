@@ -121,10 +121,13 @@ RUN set -eux \
   ; rm -rf nchan-master nchan.zip \
   ; opm install ledgetech/lua-resty-http \
   ; opm install SkyLothar/lua-resty-jwt \
-  ; opm install fffonion/lua-resty-acme \
   #; opm install duhoobo/lua-resty-smtp \
   ; ln -fs /opt/openresty/nginx/conf /etc/openresty \
   ; mkdir -p /etc/openresty/conf.d \
+  \
+  ; luarocks install lua-resty-auto-ssl \
+  ; mkdir /etc/resty-auto-ssl \
+  ; chown www-data /etc/resty-auto-ssl \
   \
   ; apt-get -y remove ${BUILD_DEPS} \
   ; apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
@@ -160,7 +163,8 @@ RUN set -eux \
 COPY services.d /etc/services.d
 COPY reload-nginx /usr/local/bin
 COPY nginx.conf /etc/openresty
-COPY nginx-site.conf /etc/openresty/conf.d/default.conf
+COPY conf.d /etc/openresty/conf.d
+COPY auto-ssl.conf /etc/openresty
 WORKDIR /srv
 
 VOLUME [ "/srv" ]
