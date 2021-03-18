@@ -15,11 +15,12 @@ test tag="latest":
 
 or:
     docker run -d --name=or --restart=always \
+        -e WEB_SERVERNAME=morphism.fun \
         -v $PWD/pub:/srv \
         -v $PWD/openresty/nginx.conf:/etc/openresty/nginx.conf \
         -v $PWD/openresty/conf.d:/etc/openresty/conf.d \
         -v $PWD/openresty/logs:/opt/openresty/nginx/logs \
+        -v $PWD/openresty/auto-ssl.conf:/etc/openresty/auto_ssl.conf \
         -v $PWD/openresty/ssl:/etc/resty-auto-ssl \
         --network=host \
         nnurphy/or
-
