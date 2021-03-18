@@ -86,24 +86,31 @@ RUN set -eux \
   ; cd openresty-${OPENRESTY_VERSION} \
   ; ./configure --prefix=/opt/openresty \
         --with-luajit \
-        --with-mail \
         --with-http_iconv_module \
         --with-http_postgres_module \
         --with-http_stub_status_module \
         --with-http_realip_module \
         --with-stream_realip_module \
-        --with-http_v2_module \
         --add-dynamic-module=../nchan-master \
+        --with-mail=dynamic \
+        --with-mail_ssl_module \
   ; make \
   ; make install \
   ; cd .. && rm -rf openresty-${OPENRESTY_VERSION} nchan-${NCHAN_VERSION} \
   ; rm -rf nchan-master nchan.zip \
   ; opm install ledgetech/lua-resty-http \
   ; opm install SkyLothar/lua-resty-jwt \
-  ; opm install fffonion/lua-resty-acme \
   #; opm install duhoobo/lua-resty-smtp \
   ; ln -fs /opt/openresty/nginx/conf /etc/openresty \
   ; mkdir -p /etc/openresty/conf.d \
+  \
+  ; luarocks install lua-resty-auto-ssl \
+  ; mkdir /etc/resty-auto-ssl \
+  ; chown www-data /etc/resty-auto-ssl \
+  ; openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 \
+        -subj '/CN=sni-support-required-for-valid-ssl' \
+        -keyout /etc/ssl/resty-auto-ssl-fallback.key \
+        -out /etc/ssl/resty-auto-ssl-fallback.crt \
   \
   ; mkdir -p /opt/apisix && cd /opt/apisix \
   ; wget -qO- https://downloads.apache.org/apisix/2.4/apache-apisix-2.4-src.tgz | tar -zxf - \
@@ -143,11 +150,12 @@ RUN set -eux \
 COPY services.as /etc/services.d
 COPY reload-nginx /usr/local/bin
 COPY nginx.conf /etc/openresty
-COPY nginx-site.conf /etc/openresty/conf.d/default.conf
+COPY conf.d /etc/openresty/conf.d
+COPY auto-ssl.conf /etc/openresty
 WORKDIR /srv
 
 VOLUME [ "/srv" ]
-EXPOSE 80
+EXPOSE 80 443
 
 ENTRYPOINT [ "/init" ]
 

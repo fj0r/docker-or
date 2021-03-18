@@ -108,13 +108,14 @@ RUN set -eux \
   ; cd openresty-${OPENRESTY_VERSION} \
   ; ./configure --prefix=/opt/openresty \
         --with-luajit \
-        --with-mail \
         --with-http_iconv_module \
         --with-http_postgres_module \
         --with-http_stub_status_module \
         --with-http_realip_module \
         --with-stream_realip_module \
         --add-dynamic-module=../nchan-master \
+        --with-mail=dynamic \
+        --with-mail_ssl_module \
   ; make \
   ; make install \
   ; cd .. && rm -rf openresty-${OPENRESTY_VERSION} nchan-${NCHAN_VERSION} \
