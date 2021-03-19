@@ -2,4 +2,6 @@
 
 echo >&2 "starting apisix"
 
+yq --inplace e ".apisix.admin_key[0].key=\"${APISIX_KEY}\"" /usr/local/apisix/conf/config.yaml
+
 exec apisix start 2>&1
