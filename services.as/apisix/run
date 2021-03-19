@@ -3,5 +3,10 @@
 echo >&2 "starting apisix"
 
 yq --inplace e ".apisix.admin_key[0].key=\"${APISIX_KEY}\"" /usr/local/apisix/conf/config.yaml
+yq --inplace e ".apisix.allow_admin[0]=\"${ALLOW_ADMIN:-0.0.0.0}\"" /usr/local/apisix/conf/config.yaml
 
-exec apisix start 2>&1
+apisix init
+apisix init_etcd
+
+exec openresty -p /usr/local/apisix -g 'daemon off;' 2>&1
+

@@ -33,8 +33,15 @@ etcd port="2379":
         bitnami/etcd:3.4.15
 as:
     docker run -d --name=as --restart=always \
-        -p 80:80 \
+        -p 9080:9080 \
+        -p 9443:9443 \
+        -p 9090:9090 \
         -e ETCD_HOST=172.17.0.1:12380 \
         -e APISIX_KEY=asdf \
         as
 
+asd:
+    docker run --rm \
+        -v $PWD/apisix-dashboard.yaml:/usr/local/apisix-dashboard/conf/conf.yaml \
+        -p 9000:9000 \
+        apache/apisix-dashboard:2.4
