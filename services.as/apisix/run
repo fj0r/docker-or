@@ -2,4 +2,4 @@
 
 echo >&2 "starting apisix"
 
-exec /opt/apisix/bin/apisix start 2>&1
+exec apisix start 2>&1
