@@ -108,6 +108,7 @@ RUN set -eux \
   ; cd openresty-${OPENRESTY_VERSION} \
   ; ./configure --prefix=/opt/openresty \
         --with-luajit \
+        --with-http_v2_module \
         --with-http_iconv_module \
         --with-http_postgres_module \
         --with-http_stub_status_module \

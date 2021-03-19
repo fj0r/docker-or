@@ -25,3 +25,16 @@ or:
         -p 80:80 \
         -p 443:443 \
         nnurphy/or
+
+etcd port="2379":
+    docker run -d --name=as-etcd --restart=always \
+        -e ALLOW_NONE_AUTHENTICATION=yes \
+        -p {{port}}:2379 \
+        bitnami/etcd:3.4.15
+as:
+    docker run -d --name=as --restart=always \
+        -p 80:80 \
+        -e ETCD_HOST=172.17.0.1:12380 \
+        -e APISIX_KEY=asdf \
+        as
+
