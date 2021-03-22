@@ -79,8 +79,10 @@ RUN set -eux \
   #; OPENRESTY_VERSION=$(curl -sSL -H "'$github_header'" $github_api/${openresty_repo}/releases | jq -r '.[0].tag_name' | cut -c 2-) \
   ; NCHAN_VERSION=1.2.7 \
   #; NCHAN_VERSION=$(curl -sSL -H "'$github_header'" $github_api/${nchan_repo}/releases | jq -r '.[0].tag_name' | cut -c 2-) \
+  ; DAV_EXT_VERSION=v3.0.0 \
   ; wget -qO- https://openresty.org/download/openresty-${OPENRESTY_VERSION}.tar.gz | tar -zxf - \
   ; wget -qO- https://github.com/slact/nchan/archive/v${NCHAN_VERSION}.tar.gz | tar -zxf - \
+  ; wget -qO- https://github.com/arut/nginx-dav-ext-module/archive/refs/tags/${DAV_EXT_VERSION}.tar.gz | tar -zxf - \
   ; wget -qO nchan.zip https://github.com/slact/nchan/archive/master.zip \
   ; unzip nchan.zip \
   ; cd openresty-${OPENRESTY_VERSION} \
@@ -88,6 +90,7 @@ RUN set -eux \
         --with-luajit \
         --with-http_v2_module \
         --with-http_dav_module \
+        --add-dynamic-module=../nginx-dav-ext-module-${DAV_EXT_VERSION} \
         --with-http_iconv_module \
         --with-http_postgres_module \
         --with-http_stub_status_module \
@@ -98,7 +101,7 @@ RUN set -eux \
         --with-mail_ssl_module \
   ; make \
   ; make install \
-  ; cd .. && rm -rf openresty-${OPENRESTY_VERSION} nchan-${NCHAN_VERSION} \
+  ; cd .. && rm -rf openresty-${OPENRESTY_VERSION} nchan-${NCHAN_VERSION} nginx-dav-ext-module-${DAV_EXT_VERSION} \
   ; rm -rf nchan-master nchan.zip \
   ; opm install ledgetech/lua-resty-http \
   ; opm install SkyLothar/lua-resty-jwt \
