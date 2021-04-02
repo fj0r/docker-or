@@ -20,7 +20,7 @@ ARG github_api=https://api.github.com/repos
 ENV DEV_DEPS \
         zsh git jq luarocks \
         python3 python3-pip python3-setuptools \
-        openssh-server openssh-client \
+        openssh-server openssh-client apache2-utils \
         pwgen curl rsync wget tcpdump socat \
         sudo htop procps tree zip unzip xz-utils zstd \
         iproute2 net-tools inetutils-ping nftables \
