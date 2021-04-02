@@ -120,8 +120,6 @@ RUN set -eux \
         --with-http_realip_module \
         --with-stream_realip_module \
         --add-dynamic-module=../nchan-master \
-        --with-mail=dynamic \
-        --with-mail_ssl_module \
   ; make \
   ; make install \
   ; cd .. && rm -rf openresty-${OPENRESTY_VERSION} nchan-${NCHAN_VERSION}  \
