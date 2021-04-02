@@ -23,7 +23,7 @@ ENV DEV_DEPS \
         openssh-server openssh-client apache2-utils \
         pwgen curl rsync wget tcpdump socat \
         sudo htop procps tree zip unzip xz-utils zstd \
-        iproute2 net-tools inetutils-ping nftables \
+        iproute2 inetutils-ping nftables \
         libpcre3-dev libssl-dev libpq-dev zlib1g-dev
 
 ENV BUILD_DEPS software-properties-common build-essential
