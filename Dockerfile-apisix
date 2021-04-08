@@ -91,7 +91,6 @@ RUN set -eux \
         --with-http_auth_request_module \
         --with-http_gzip_static_module \
         --with-http_random_index_module \
-        --with-http_dav_module \
         --with-http_iconv_module \
         --with-http_postgres_module \
         --with-http_stub_status_module \
