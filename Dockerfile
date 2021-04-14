@@ -97,14 +97,12 @@ RUN set -eux \
   ; curl --fail --silent -L ${s6overlay_url} \
     | tar xzvf - -C / \
   \
+  ; OPENRESTY_VERSION=$(curl -sSL -H "'$github_header'" $github_api/${openresty_repo}/releases | jq -r '.[0].tag_name' | cut -c 2-) \
   ; OPENRESTY_VERSION=1.19.3.1 \
-  #; OPENRESTY_VERSION=$(curl -sSL -H "'$github_header'" $github_api/${openresty_repo}/releases | jq -r '.[0].tag_name' | cut -c 2-) \
-  ; NCHAN_VERSION=1.2.7 \
-  #; NCHAN_VERSION=$(curl -sSL -H "'$github_header'" $github_api/${nchan_repo}/releases | jq -r '.[0].tag_name' | cut -c 2-) \
   ; curl -sSL https://openresty.org/download/openresty-${OPENRESTY_VERSION}.tar.gz | tar -zxf - \
+  ; NCHAN_VERSION=$(curl -sSL -H "'$github_header'" $github_api/${nchan_repo}/releases | jq -r '.[0].tag_name' | cut -c 2-) \
+  ; NCHAN_VERSION=1.2.8 \
   ; curl -sSL https://github.com/slact/nchan/archive/v${NCHAN_VERSION}.tar.gz | tar -zxf - \
-  ; curl -sSLo nchan.zip https://github.com/slact/nchan/archive/master.zip \
-  ; unzip nchan.zip \
   ; cd openresty-${OPENRESTY_VERSION} \
   ; ./configure --prefix=/opt/openresty \
         --with-luajit \
@@ -120,7 +118,7 @@ RUN set -eux \
         --with-http_realip_module \
         --with-stream_realip_module \
         --with-http_postgres_module \
-        --add-dynamic-module=../nchan-master \
+        --add-dynamic-module=../nchan-${NCHAN_VERSION} \
   ; make \
   ; make install \
   ; cd .. && rm -rf openresty-${OPENRESTY_VERSION} nchan-${NCHAN_VERSION}  \
