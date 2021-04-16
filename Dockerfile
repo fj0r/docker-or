@@ -84,6 +84,7 @@ RUN set -eux \
   ; frp_version=$(curl -sSL -H "'$github_header'" $github_api/${frp_repo}/releases | jq -r '.[0].tag_name' | cut -c 2-) \
   ; frp_url=https://github.com/${frp_repo}/releases/download/v0.36.2/frp_0.36.2_linux_amd64.tar.gz \
   ; curl -sSL ${frp_url} | tar zxf - --strip-components=1 -C /usr/local/bin */frps -C /etc */frps.ini \
+  ; echo 'token = secret' >> /etc/frps.ini \
   \
   ; websocat_version=$(curl -sSL -H "'$github_header'" $github_api/${websocat_repo}/releases | jq -r '.[0].tag_name') \
   ; websocat_url=https://github.com/${websocat_repo}/releases/download/${websocat_version}/websocat_amd64-linux-static \
