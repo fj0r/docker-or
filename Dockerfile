@@ -10,6 +10,7 @@ ARG just_repo=casey/just
 ARG watchexec_repo=watchexec/watchexec
 ARG yq_repo=mikefarah/yq
 ARG websocat_repo=vi/websocat
+ARG inlets_repo=inlets/inlets
 ARG frp_repo=fatedier/frp
 ARG pup_repo=ericchiang/pup
 ARG rg_repo=BurntSushi/ripgrep
@@ -60,56 +61,60 @@ RUN set -eux \
   ; curl -sL https://deb.nodesource.com/setup_14.x | bash - \
   ; apt-get install -y --no-install-recommends nodejs \
   \
-  ; nvim_version=$(curl -sSL -H "'$github_header'" $github_api/${nvim_repo}/releases | jq -r '.[0].tag_name') \
-  ; nvim_url=https://github.com/${nvim_repo}/releases/download/${nvim_version}/nvim-linux64.tar.gz \
+  ; nvim_ver=$(curl -sSL -H "'$github_header'" $github_api/${nvim_repo}/releases | jq -r '.[0].tag_name') \
+  ; nvim_url=https://github.com/${nvim_repo}/releases/download/${nvim_ver}/nvim-linux64.tar.gz \
   ; curl -sSL ${nvim_url} | tar zxf - -C /usr/local --strip-components=1 \
   ; pip3 --no-cache-dir install neovim neovim-remote invoke \
   \
-  ; rg_version=$(curl -sSL -H "'$github_header'" $github_api/${rg_repo}/releases | jq -r '.[0].tag_name') \
-  ; rg_url=https://github.com/${rg_repo}/releases/download/${rg_version}/ripgrep-${rg_version}-x86_64-unknown-linux-musl.tar.gz \
-  ; curl -sSL ${rg_url} | tar zxf - -C /usr/local/bin --strip-components=1 ripgrep-${rg_version}-x86_64-unknown-linux-musl/rg \
+  ; rg_ver=$(curl -sSL -H "'$github_header'" $github_api/${rg_repo}/releases | jq -r '.[0].tag_name') \
+  ; rg_url=https://github.com/${rg_repo}/releases/download/${rg_ver}/ripgrep-${rg_ver}-x86_64-unknown-linux-musl.tar.gz \
+  ; curl -sSL ${rg_url} | tar zxf - -C /usr/local/bin --strip-components=1 ripgrep-${rg_ver}-x86_64-unknown-linux-musl/rg \
   \
-  ; just_version=$(curl -sSL -H "'$github_header'" $github_api/${just_repo}/releases | jq -r '.[0].tag_name') \
-  ; just_url=https://github.com/${just_repo}/releases/download/${just_version}/just-${just_version}-x86_64-unknown-linux-musl.tar.gz \
+  ; just_ver=$(curl -sSL -H "'$github_header'" $github_api/${just_repo}/releases | jq -r '.[0].tag_name') \
+  ; just_url=https://github.com/${just_repo}/releases/download/${just_ver}/just-${just_ver}-x86_64-unknown-linux-musl.tar.gz \
   ; curl -sSL ${just_url} | tar zxf - -C /usr/local/bin just \
   \
-  ; watchexec_version=$(curl -sSL -H "'$github_header'" $github_api/${watchexec_repo}/releases | jq -r '.[0].tag_name') \
-  ; watchexec_url=https://github.com/${watchexec_repo}/releases/download/${watchexec_version}/watchexec-${watchexec_version}-x86_64-unknown-linux-musl.tar.xz \
-  ; curl -sSL ${watchexec_url} | tar Jxf - --strip-components=1 -C /usr/local/bin watchexec-${watchexec_version}-x86_64-unknown-linux-musl/watchexec \
+  ; watchexec_ver=$(curl -sSL -H "'$github_header'" $github_api/${watchexec_repo}/releases | jq -r '.[0].tag_name') \
+  ; watchexec_url=https://github.com/${watchexec_repo}/releases/download/${watchexec_ver}/watchexec-${watchexec_ver}-x86_64-unknown-linux-musl.tar.xz \
+  ; curl -sSL ${watchexec_url} | tar Jxf - --strip-components=1 -C /usr/local/bin watchexec-${watchexec_ver}-x86_64-unknown-linux-musl/watchexec \
   \
-  ; yq_version=$(curl -sSL -H "'$github_header'" $github_api/${yq_repo}/releases | jq -r '.[0].tag_name') \
-  ; yq_url=https://github.com/${yq_repo}/releases/download/${yq_version}/yq_linux_amd64 \
+  ; yq_ver=$(curl -sSL -H "'$github_header'" $github_api/${yq_repo}/releases | jq -r '.[0].tag_name') \
+  ; yq_url=https://github.com/${yq_repo}/releases/download/${yq_ver}/yq_linux_amd64 \
   ; curl -sSLo /usr/local/bin/yq ${yq_url} ; chmod +x /usr/local/bin/yq \
   \
-  ; frp_version=$(curl -sSL -H "'$github_header'" $github_api/${frp_repo}/releases | jq -r '.[0].tag_name' | cut -c 2-) \
-  ; frp_url=https://github.com/${frp_repo}/releases/download/v0.36.2/frp_0.36.2_linux_amd64.tar.gz \
-  ; curl -sSL ${frp_url} | tar zxf - --strip-components=1 -C /usr/local/bin frp_${frp_version}_linux_amd64/frps -C /etc frp_${frp_version}_linux_amd64/frps.ini \
-  ; echo 'token = secret' >> /etc/frps.ini \
+  #; frp_ver=$(curl -sSL -H "'$github_header'" $github_api/${frp_repo}/releases | jq -r '.[0].tag_name' | cut -c 2-) \
+  #; frp_url=https://github.com/${frp_repo}/releases/download/v0.36.2/frp_0.36.2_linux_amd64.tar.gz \
+  #; curl -sSL ${frp_url} | tar zxf - --strip-components=1 -C /usr/local/bin frp_${frp_ver}_linux_amd64/frps -C /etc frp_${frp_ver}_linux_amd64/frps.ini \
+  #; echo 'token = secret' >> /etc/frps.ini \
   \
-  ; websocat_version=$(curl -sSL -H "'$github_header'" $github_api/${websocat_repo}/releases | jq -r '.[0].tag_name') \
-  ; websocat_url=https://github.com/${websocat_repo}/releases/download/${websocat_version}/websocat_amd64-linux-static \
+  ; inlets_ver=$(curl -sSL -H "'$github_header'" $github_api/${inlets_repo}/releases | jq -r '.[0].tag_name') \
+  ; inlets_url=https://github.com/inlets/inlets/releases/download/${inlets_ver}/inlets \
+  ; curl -sSLo /usr/local/bin/inlets ${inlets_url} ; chmod +x /usr/local/bin/inlets \
+  \
+  ; websocat_ver=$(curl -sSL -H "'$github_header'" $github_api/${websocat_repo}/releases | jq -r '.[0].tag_name') \
+  ; websocat_url=https://github.com/${websocat_repo}/releases/download/${websocat_ver}/websocat_amd64-linux-static \
   ; curl -sSLo /usr/local/bin/websocat ${websocat_url} ; chmod +x /usr/local/bin/websocat \
   \
-  ; pup_version=$(curl -sSL -H "'$github_header'" $github_api/${pup_repo}/releases | jq -r '.[0].tag_name') \
-  ; pup_url=https://github.com/${pup_repo}/releases/download/${pup_version}/pup_${pup_version}_linux_amd64.zip \
+  ; pup_ver=$(curl -sSL -H "'$github_header'" $github_api/${pup_repo}/releases | jq -r '.[0].tag_name') \
+  ; pup_url=https://github.com/${pup_repo}/releases/download/${pup_ver}/pup_${pup_ver}_linux_amd64.zip \
   ; curl -sSLo pup.zip ${pup_url} && unzip pup.zip && rm -f pup.zip && chmod +x pup && mv pup /usr/local/bin/ \
   \
-  ; wasmtime_version=$(curl -sSL -H "'$github_header'" $github_api/${wasmtime_repo}/releases | jq -r '[.[]|select(.prerelease == false)][0].tag_name') \
-  ; wasmtime_url=https://github.com/${wasmtime_repo}/releases/download/${wasmtime_version}/wasmtime-${wasmtime_version}-x86_64-linux.tar.xz \
-  ; curl -sSL ${wasmtime_url} | tar Jxf - --strip-components=1 -C /usr/local/bin wasmtime-${wasmtime_version}-x86_64-linux/wasmtime \
+  ; wasmtime_ver=$(curl -sSL -H "'$github_header'" $github_api/${wasmtime_repo}/releases | jq -r '[.[]|select(.prerelease == false)][0].tag_name') \
+  ; wasmtime_url=https://github.com/${wasmtime_repo}/releases/download/${wasmtime_ver}/wasmtime-${wasmtime_ver}-x86_64-linux.tar.xz \
+  ; curl -sSL ${wasmtime_url} | tar Jxf - --strip-components=1 -C /usr/local/bin wasmtime-${wasmtime_ver}-x86_64-linux/wasmtime \
   \
-  ; s6overlay_version=$(curl -sSL -H "'$github_header'" $github_api/${s6overlay_repo}/releases | jq -r '.[0].tag_name') \
-  ; s6overlay_url=https://github.com/${s6overlay_repo}/releases/download/${s6overlay_version}/s6-overlay-amd64.tar.gz \
+  ; s6overlay_ver=$(curl -sSL -H "'$github_header'" $github_api/${s6overlay_repo}/releases | jq -r '.[0].tag_name') \
+  ; s6overlay_url=https://github.com/${s6overlay_repo}/releases/download/${s6overlay_ver}/s6-overlay-amd64.tar.gz \
   ; curl --fail --silent -L ${s6overlay_url} \
     | tar xzvf - -C / \
   \
-  ; OPENRESTY_VERSION=$(curl -sSL -H "'$github_header'" $github_api/${openresty_repo}/releases | jq -r '.[0].tag_name' | cut -c 2-) \
-  ; OPENRESTY_VERSION=1.19.3.1 \
-  ; curl -sSL https://openresty.org/download/openresty-${OPENRESTY_VERSION}.tar.gz | tar -zxf - \
-  ; NCHAN_VERSION=$(curl -sSL -H "'$github_header'" $github_api/${nchan_repo}/releases | jq -r '.[0].tag_name' | cut -c 2-) \
-  ; NCHAN_VERSION=1.2.8 \
-  ; curl -sSL https://github.com/${nchan_repo}/archive/v${NCHAN_VERSION}.tar.gz | tar -zxf - \
-  ; cd openresty-${OPENRESTY_VERSION} \
+  ; OPENRESTY_VER=$(curl -sSL -H "'$github_header'" $github_api/${openresty_repo}/releases | jq -r '.[0].tag_name' | cut -c 2-) \
+  ; OPENRESTY_VER=1.19.3.1 \
+  ; curl -sSL https://openresty.org/download/openresty-${OPENRESTY_VER}.tar.gz | tar -zxf - \
+  ; NCHAN_VER=$(curl -sSL -H "'$github_header'" $github_api/${nchan_repo}/releases | jq -r '.[0].tag_name' | cut -c 2-) \
+  ; NCHAN_VER=1.2.8 \
+  ; curl -sSL https://github.com/${nchan_repo}/archive/v${NCHAN_VER}.tar.gz | tar -zxf - \
+  ; cd openresty-${OPENRESTY_VER} \
   ; ./configure --prefix=/opt/openresty \
         --with-luajit \
         --with-http_v2_module \
@@ -124,10 +129,10 @@ RUN set -eux \
         --with-http_realip_module \
         --with-stream_realip_module \
         --with-http_postgres_module \
-        --add-dynamic-module=../nchan-${NCHAN_VERSION} \
+        --add-dynamic-module=../nchan-${NCHAN_VER} \
   ; make \
   ; make install \
-  ; cd .. && rm -rf openresty-${OPENRESTY_VERSION} nchan-${NCHAN_VERSION}  \
+  ; cd .. && rm -rf openresty-${OPENRESTY_VER} nchan-${NCHAN_VER}  \
   ; rm -rf nchan-master nchan.zip \
   ; opm install ledgetech/lua-resty-http \
   ; opm install SkyLothar/lua-resty-jwt \
@@ -166,8 +171,8 @@ RUN set -eux \
   ; mv $nvim_home/plugged /opt/vim \
   ; ln -sf /opt/vim/plugged $nvim_home \
   ; coc_lua_bin_repo=josa42/coc-lua-binaries \
-  ; lua_ls_version=$(curl -sSL -H "'$github_header'" $github_api/${coc_lua_bin_repo}/releases | jq -r '.[0].tag_name') \
-  ; lua_ls_url=https://github.com/${coc_lua_bin_repo}/releases/download/${lua_ls_version}/lua-language-server-linux.tar.gz \
+  ; lua_ls_ver=$(curl -sSL -H "'$github_header'" $github_api/${coc_lua_bin_repo}/releases | jq -r '.[0].tag_name') \
+  ; lua_ls_url=https://github.com/${coc_lua_bin_repo}/releases/download/${lua_ls_ver}/lua-language-server-linux.tar.gz \
   ; lua_coc_data=$nvim_home/coc-data/extensions/coc-lua-data \
   ; mkdir -p $lua_coc_data \
   ; curl -sSL ${lua_ls_url} | tar zxf - -C $lua_coc_data \
