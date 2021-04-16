@@ -175,10 +175,9 @@ RUN set -eux \
   ; npm cache clean -f
 
 COPY services.d /etc/services.d
-COPY reload-nginx /usr/local/bin
-COPY nginx.conf /etc/openresty
 COPY conf.d /etc/openresty/conf.d
-COPY auto-ssl.conf /etc/openresty
+COPY nginx.d /etc/openresty
+COPY reload-nginx /usr/local/bin
 WORKDIR /srv
 
 VOLUME [ "/srv" ]
