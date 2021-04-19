@@ -1,4 +1,4 @@
-FROM debian:testing-slim
+FROM fj0rd/io:foundation
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 TIMEZONE=Asia/Shanghai
 
@@ -20,13 +20,9 @@ ARG github_header="Accept: application/vnd.github.v3+json"
 ARG github_api=https://api.github.com/repos
 
 ENV DEV_DEPS \
-        zsh git jq luarocks \
-        python3 python3-pip python3-setuptools \
-        openssh-server openssh-client apache2-utils \
-        pwgen curl rsync tcpdump socat \
-        sudo htop procps tree zip unzip xz-utils zstd \
-        iproute2 inetutils-ping nftables \
-        libpcre3-dev libssl-dev libpq-dev zlib1g-dev
+        luarocks apache2-utils \
+        libpcre3-dev libssl-dev \
+        libpq-dev zlib1g-dev
 
 ENV BUILD_DEPS software-properties-common build-essential
 
@@ -38,25 +34,8 @@ RUN set -eux \
   ; apt-get upgrade -y \
   ; DEBIAN_FRONTEND=noninteractive \
     apt-get install -y --no-install-recommends \
-    ca-certificates \
-    tzdata \
-    locales \
     $DEV_DEPS \
     $BUILD_DEPS \
-  \
-  ; sed -i 's/^.*\(%sudo.*\)ALL$/\1NOPASSWD:ALL/g' /etc/sudoers \
-  ; ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime \
-  ; echo "$TIMEZONE" > /etc/timezone \
-  ; sed -i /etc/locale.gen \
-    -e 's/# \(en_US.UTF-8 UTF-8\)/\1/' \
-    -e 's/# \(zh_CN.UTF-8 UTF-8\)/\1/' \
-  ; locale-gen \
-  \
-  ; mkdir -p /var/run/sshd \
-  ; sed -i /etc/ssh/sshd_config \
-        -e 's!.*\(AuthorizedKeysFile\).*!\1 /etc/authorized_keys/%u!' \
-        -e 's!.*\(GatewayPorts\).*!\1 yes!' \
-        -e 's!.*\(PasswordAuthentication\).*yes!\1 no!' \
   \
   ; curl -sL https://deb.nodesource.com/setup_14.x | bash - \
   ; apt-get install -y --no-install-recommends nodejs \
