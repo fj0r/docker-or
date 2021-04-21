@@ -6,6 +6,9 @@ ARG inlets_repo=inlets/inlets
 ARG frp_repo=fatedier/frp
 ARG s6overlay_repo=just-containers/s6-overlay
 
+ARG github_header="Accept: application/vnd.github.v3+json"
+ARG github_api=https://api.github.com/repos
+
 ENV DEV_DEPS \
         luarocks apache2-utils \
         libpcre3-dev libssl-dev \
@@ -34,8 +37,7 @@ RUN set -eux \
   \
   ; s6overlay_ver=$(curl -sSL -H "'$github_header'" $github_api/${s6overlay_repo}/releases | jq -r '.[0].tag_name') \
   ; s6overlay_url=https://github.com/${s6overlay_repo}/releases/download/${s6overlay_ver}/s6-overlay-amd64.tar.gz \
-  ; curl --fail --silent -L ${s6overlay_url} \
-    | tar xzvf - -C / \
+  ; curl --fail --silent -L ${s6overlay_url} | tar xzvf - -C / \
   \
   ; OPENRESTY_VER=$(curl -sSL -H "'$github_header'" $github_api/${openresty_repo}/tags | jq -r '.[0].name' | cut -c 2-) \
   ; curl -sSL https://openresty.org/download/openresty-${OPENRESTY_VER}.tar.gz | tar -zxf - \
