@@ -77,10 +77,8 @@ RUN set -eux \
 
 
 COPY services.as /etc/services.d
+COPY nginx.d /etc/openresty
 COPY reload-nginx /usr/local/bin
-COPY nginx.conf /etc/openresty
-COPY conf.d /etc/openresty/conf.d
-COPY auto-ssl.conf /etc/openresty
 WORKDIR /srv
 
 VOLUME [ "/srv" ]
