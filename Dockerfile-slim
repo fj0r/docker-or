@@ -9,6 +9,7 @@ ARG watchexec_repo=watchexec/watchexec
 ARG github_header="Accept: application/vnd.github.v3+json"
 ARG github_api=https://api.github.com/repos
 
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 TIMEZONE=Asia/Shanghai
 ENV DEV_DEPS \
         luarocks apache2-utils \
         libpcre3-dev libssl-dev \
@@ -24,7 +25,7 @@ RUN set -eux \
   ; DEBIAN_FRONTEND=noninteractive \
     apt-get install -y --no-install-recommends \
     sudo locales tzdata ca-certificates \
-    iproute2 htop procps curl tcpdump \
+    iproute2 procps curl jq xz-utils \
     openssh-server \
     $DEV_DEPS \
     $BUILD_DEPS \
