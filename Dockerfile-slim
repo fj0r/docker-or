@@ -17,7 +17,7 @@ ENV DEV_DEPS \
         libpcre3-dev libssl-dev \
         libpq-dev zlib1g-dev
 
-ENV BUILD_DEPS software-properties-common build-essential
+ENV BUILD_DEPS software-properties-common build-essential git
 
 ENV PATH=/opt/openresty/bin:$PATH
 
@@ -28,7 +28,7 @@ RUN set -eux \
     apt-get install -y --no-install-recommends \
     sudo locales tzdata ca-certificates \
     iproute2 procps curl jq xz-utils \
-    git openssh-server \
+    openssh-server \
     $DEV_DEPS \
     $BUILD_DEPS \
   \
@@ -60,8 +60,10 @@ RUN set -eux \
   ; mkdir $cfg_home/.config \
   ; nvim_home=$cfg_home/.config/nvim \
   ; git clone --depth=1 https://github.com/fj0r/nvim.git $nvim_home \
+  #; sed -i '/puremourning\/vimspector/d' $nvim_home/config.plugin/__init__.vim \
   ; NVIM_SETUP_PLUGINS=1 \
     nvim -u $nvim_home/init.vim --headless +'PlugInstall' +qa \
+  ; rm -rf $nvim_home/plugged/*/.git \
   ; mv $nvim_home/plugged /opt/vim \
   ; ln -sf /opt/vim/plugged $nvim_home \
   \
