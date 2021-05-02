@@ -5,6 +5,8 @@ ARG nchan_repo=slact/nchan
 ARG s6overlay_repo=just-containers/s6-overlay
 ARG websocat_repo=vi/websocat
 ARG watchexec_repo=watchexec/watchexec
+ARG nvim_repo=neovim/neovim
+ARG rg_repo=BurntSushi/ripgrep
 
 ARG github_header="Accept: application/vnd.github.v3+json"
 ARG github_api=https://api.github.com/repos
@@ -45,6 +47,23 @@ RUN set -eux \
         -e 's!.*\(GatewayPorts\).*!\1 yes!' \
         -e 's!.*\(PasswordAuthentication\).*yes!\1 no!' \
   \
+  ; rg_ver=$(curl -sSL -H "'$github_header'" $github_api/${rg_repo}/releases | jq -r '.[0].tag_name') \
+  ; rg_url=https://github.com/${rg_repo}/releases/download/${rg_ver}/ripgrep-${rg_ver}-x86_64-unknown-linux-musl.tar.gz \
+  ; curl -sSL ${rg_url} | tar zxf - -C /usr/local/bin --strip-components=1 ripgrep-${rg_ver}-x86_64-unknown-linux-musl/rg \
+  \
+  ; nvim_ver=$(curl -sSL -H "'$github_header'" $github_api/${nvim_repo}/releases | jq -r '.[0].tag_name') \
+  ; nvim_url=https://github.com/${nvim_repo}/releases/download/${nvim_ver}/nvim-linux64.tar.gz \
+  ; curl -sSL ${nvim_url} | tar zxf - -C /usr/local --strip-components=1 \
+  ; cfg_home=/etc/skel \
+  ; mkdir -p /opt/language-server \
+  ; mkdir -p /opt/vim \
+  ; mkdir $cfg_home/.config \
+  ; nvim_home=$cfg_home/.config/nvim \
+  ; git clone --depth=1 https://github.com/fj0r/nvim.git $nvim_home \
+  ; NVIM_SETUP_PLUGINS=1 \
+    nvim -u $nvim_home/init.vim --headless +'PlugInstall' +qa \
+  ; mv $nvim_home/plugged /opt/vim \
+  ; ln -sf /opt/vim/plugged $nvim_home \
   \
   ; s6overlay_ver=$(curl -sSL -H "'$github_header'" $github_api/${s6overlay_repo}/releases | jq -r '.[0].tag_name') \
   ; s6overlay_url=https://github.com/${s6overlay_repo}/releases/download/${s6overlay_ver}/s6-overlay-amd64.tar.gz \
