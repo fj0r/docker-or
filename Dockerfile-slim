@@ -60,7 +60,6 @@ RUN set -eux \
   ; mkdir $cfg_home/.config \
   ; nvim_home=$cfg_home/.config/nvim \
   ; git clone --depth=1 https://github.com/fj0r/nvim.git $nvim_home \
-  #; sed -i '/puremourning\/vimspector/d' $nvim_home/config.plugin/__init__.vim \
   ; NVIM_SETUP_PLUGINS=1 \
     nvim -u $nvim_home/init.vim --headless +'PlugInstall' +qa \
   ; rm -rf $nvim_home/plugged/*/.git \
