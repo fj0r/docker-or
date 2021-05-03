@@ -65,6 +65,16 @@ RUN set -eux \
   ; rm -rf $nvim_home/plugged/*/.git \
   ; mv $nvim_home/plugged /opt/vim \
   ; ln -sf /opt/vim/plugged $nvim_home \
+  ; mkdir -p /root/.config \
+  ; ln -sf $nvim_home /root/.config/nvim \
+  \
+  ; coc_lua_bin_repo=josa42/coc-lua-binaries \
+  ; lua_ls_ver=$(curl -sSL -H "'$github_header'" $github_api/${coc_lua_bin_repo}/releases | jq -r '.[0].tag_name') \
+  ; lua_ls_url=https://github.com/${coc_lua_bin_repo}/releases/download/${lua_ls_ver}/lua-language-server-linux.tar.gz \
+  ; mkdir -p /opt/language-server/sumneko_lua \
+  ; curl -sSL ${lua_ls_url} | tar zxf - \
+      -C /opt/language-server/sumneko_lua \
+      --strip-components=1 \
   \
   ; s6overlay_ver=$(curl -sSL -H "'$github_header'" $github_api/${s6overlay_repo}/releases | jq -r '.[0].tag_name') \
   ; s6overlay_url=https://github.com/${s6overlay_repo}/releases/download/${s6overlay_ver}/s6-overlay-amd64.tar.gz \
