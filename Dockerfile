@@ -77,6 +77,10 @@ RUN set -eux \
         -keyout /etc/ssl/resty-auto-ssl-fallback.key \
         -out /etc/ssl/resty-auto-ssl-fallback.crt \
   \
+  ; ln -sf /etc/skel/.config /root \
+  ; ln -sf /etc/skel/.zshrc /root \
+  ; ln -sf /etc/skel/.zshrc.d /root \
+  \
   ; apt-get -y remove ${BUILD_DEPS} \
   ; apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
