@@ -46,6 +46,8 @@ RUN set -eux \
         -e 's!.*\(AuthorizedKeysFile\).*!\1 /etc/authorized_keys/%u!' \
         -e 's!.*\(GatewayPorts\).*!\1 yes!' \
         -e 's!.*\(PasswordAuthentication\).*yes!\1 no!' \
+  ; echo "Match Address 10.0.0.0/8,172.17.0.0/16,192.168.0.0/16\n    PasswordAuthentication yes" \
+        >> /etc/ssh/sshd_config \
   \
   ; rg_ver=$(curl -sSL -H "'$github_header'" $github_api/${rg_repo}/releases | jq -r '.[0].tag_name') \
   ; rg_url=https://github.com/${rg_repo}/releases/download/${rg_ver}/ripgrep-${rg_ver}-x86_64-unknown-linux-musl.tar.gz \
