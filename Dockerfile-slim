@@ -61,10 +61,10 @@ RUN set -eux \
   ; mkdir -p /opt/vim \
   ; mkdir $cfg_home/.config \
   ; nvim_home=$cfg_home/.config/nvim \
-  ; git clone --depth=1 https://github.com/fj0r/nvim.git $nvim_home \
-  ; NVIM_SETUP_PLUGINS=1 \
-    nvim -u $nvim_home/init.vim --headless +'PlugInstall' +qa \
-  ; rm -rf $nvim_home/plugged/*/.git \
+  ; git clone --recursive --depth=1 https://github.com/fj0r/nvim-lua.git $nvim_home \
+  ; NVIM_BOOTSTRAP=1 \
+    nvim -u $nvim_home/init.vim +'autocmd User PackerComplete sleep 100m | qall' +PackerSync \
+  ; rm -rf $nvim_home/pack/packer/start/*/.git \
   ; mv $nvim_home/plugged /opt/vim \
   ; ln -sf /opt/vim/plugged $nvim_home \
   ; mkdir -p /root/.config \
