@@ -118,6 +118,9 @@ RUN set -eux \
   #; opm install duhoobo/lua-resty-smtp \
   ; ln -fs /opt/openresty/nginx/conf /etc/openresty \
   ; mkdir -p /etc/openresty/conf.d \
+  ; echo 'shopt -s cdable_vars' >> /root/.bashrc \
+  ; echo 'export or=/etc/openresty' >> /root/.bashrc \
+  ; echo 'export logs=/opt/openresty/nginx/logs' >> /root/.bashrc \
   \
   ; luarocks install lua-resty-auto-ssl \
   ; mkdir /etc/resty-auto-ssl \

@@ -68,6 +68,8 @@ RUN set -eux \
   #; opm install duhoobo/lua-resty-smtp \
   ; ln -fs /opt/openresty/nginx/conf /etc/openresty \
   ; mkdir -p /etc/openresty/conf.d \
+  ; echo 'hash -d o="/etc/openresty"' >> /etc/skel/.ext.zsh \
+  ; echo 'hash -d l="/opt/openresty/nginx/logs"' >> /etc/skel/.ext.zsh \
   \
   ; luarocks install lua-resty-auto-ssl \
   ; mkdir /etc/resty-auto-ssl \
