@@ -62,15 +62,12 @@ RUN set -eux \
   ; mkdir $cfg_home/.config \
   ; nvim_home=$cfg_home/.config/nvim \
   ; git clone --recursive --depth=1 https://github.com/fj0r/nvim-lua.git $nvim_home \
+  ; ln -sf $cfg_home/.* /root \
   ; NVIM_BOOTSTRAP=1 \
-    nvim -u $nvim_home/init.lua --headless \
-    +'autocmd User PackerComplete quitall' \
-    +'lua require("packer").sync()' \
+    nvim --headless +'autocmd User PackerComplete quitall' +'lua require("packer").sync()' \
   ; rm -rf $nvim_home/pack/packer/start/*/.git \
   ; mv $nvim_home/pack /opt/vim \
   ; ln -sf /opt/vim/pack $nvim_home \
-  ; mkdir -p /root/.config \
-  ; ln -sf $nvim_home /root/.config/nvim \
   \
   ; coc_lua_bin_repo=josa42/coc-lua-binaries \
   ; lua_ls_ver=$(curl -sSL -H "'$github_header'" $github_api/${coc_lua_bin_repo}/releases | jq -r '.[0].tag_name') \
@@ -129,8 +126,6 @@ RUN set -eux \
         -subj '/CN=sni-support-required-for-valid-ssl' \
         -keyout /etc/ssl/resty-auto-ssl-fallback.key \
         -out /etc/ssl/resty-auto-ssl-fallback.crt \
-  \
-  ; ln -sf /etc/skel/.config/nvim /root/.config/ \
   \
   ; apt-get -y remove ${BUILD_DEPS} \
   ; apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
