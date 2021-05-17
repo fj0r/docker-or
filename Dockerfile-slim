@@ -64,8 +64,8 @@ RUN set -eux \
   ; git clone --recursive --depth=1 https://github.com/fj0r/nvim-lua.git $nvim_home \
   ; ln -sf $cfg_home/.config $cfg_home/.zshrc* /root \
   ; NVIM_BOOTSTRAP=1 \
-    nvim --headless +'autocmd User PackerComplete ++once quitall' +'lua require("packer").sync()' \
-    nvim --headless +'TSUpdate|quitall' \
+    nvim --headless +'autocmd User PackerComplete quitall' +'lua require("packer").sync()' \
+    # nvim --headless +'TSUpdate|quitall' \
   ; rm -rf $nvim_home/pack/packer/start/*/.git \
   ; mv $nvim_home/pack /opt/vim \
   ; ln -sf /opt/vim/pack $nvim_home \
