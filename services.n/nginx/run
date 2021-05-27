@@ -1,0 +1,20 @@
+#!/usr/bin/with-contenv sh
+
+if [ ! -z $WEB_SERVERNAME ]; then
+    sed -i 's!\(server_name\).*$!\1 '"$WEB_SERVERNAME"';!' /etc/nginx/conf.d/default.conf
+fi
+
+if [ ! -z $WEB_ROOT ]; then
+    sed -i 's!\(set $root\).*$!\1 '"\'$WEB_ROOT\'"';!' /etc/nginx/conf.d/default.conf
+fi
+
+if [ -z $WS_FIXED ]; then
+    export websocat_token=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13)
+    echo "${websocat_token}" > /.websocat-token
+    echo "websocat url is \`/websocat-${websocat_token}\`"
+    sed -i 's!\(websocat\).*{$!\1'"-$websocat_token"' {!' /etc/nginx/conf.d/default.conf
+fi
+
+echo >&2 "starting nginx"
+
+exec /opt/nginx/sbin/nginx 2>&1

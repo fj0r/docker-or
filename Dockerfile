@@ -62,7 +62,6 @@ RUN set -eux \
   ; make \
   ; make install \
   ; cd .. && rm -rf openresty-${OPENRESTY_VER} nchan-${NCHAN_VER}  \
-  ; rm -rf nchan-master nchan.zip \
   ; opm install ledgetech/lua-resty-http \
   ; opm install SkyLothar/lua-resty-jwt \
   #; opm install duhoobo/lua-resty-smtp \
@@ -86,8 +85,8 @@ RUN set -eux \
   ; apt-get -y remove ${BUILD_DEPS} \
   ; apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
-COPY services.d /etc/services.d
-COPY nginx.d /etc/openresty
+COPY services.o /etc/services.d
+COPY config.o /etc/openresty
 COPY reload-nginx /usr/local/bin
 WORKDIR /srv
 
