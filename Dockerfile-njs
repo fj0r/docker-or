@@ -19,7 +19,7 @@ ENV DEV_DEPS \
 
 ENV BUILD_DEPS software-properties-common build-essential
 
-ENV PATH=/opt/nginx/bin:$PATH
+ENV PATH=/opt/nginx/sbin:$PATH
 
 RUN set -eux \
   ; apt-get update \

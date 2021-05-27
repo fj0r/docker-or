@@ -87,7 +87,7 @@ RUN set -eux \
 
 COPY services.o /etc/services.d
 COPY config.o /etc/openresty
-COPY reload-nginx /usr/local/bin
+COPY reload-openresty /usr/local/bin
 WORKDIR /srv
 
 VOLUME [ "/srv" ]

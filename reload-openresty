@@ -1,0 +1,7 @@
+#!/bin/sh
+openresty -t
+if [ $? -eq 0 ]
+then
+        echo "[$(date -Iseconds)] Reloading Openresty Configuration"
+        openresty -s reload
+fi

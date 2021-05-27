@@ -3,4 +3,4 @@ echo >&2 "starting watcher"
 
 
 sleep 2
-exec watchexec -p -w /etc/openresty -- reload-nginx 2>&1
+exec watchexec -p -w /etc/nginx -- reload-nginx 2>&1
