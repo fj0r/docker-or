@@ -50,6 +50,11 @@ RUN set -eux \
   ; echo "Match Address 10.0.0.0/8,172.17.0.0/16,192.168.0.0/16\n    PasswordAuthentication yes" \
         >> /etc/ssh/sshd_config \
   \
+  ; git config --global pull.rebase false \
+  ; git config --global init.defaultBranch main \
+  ; git config --global user.name "unnamed" \
+  ; git config --global user.email "unnamed@container" \
+  \
   ; rg_ver=$(curl -sSL -H "'$github_header'" $github_api/${rg_repo}/releases | jq -r '.[0].tag_name') \
   ; rg_url=https://github.com/${rg_repo}/releases/download/${rg_ver}/ripgrep-${rg_ver}-x86_64-unknown-linux-musl.tar.gz \
   ; curl -sSL ${rg_url} | tar zxf - -C /usr/local/bin --strip-components=1 ripgrep-${rg_ver}-x86_64-unknown-linux-musl/rg \
