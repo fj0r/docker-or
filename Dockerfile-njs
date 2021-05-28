@@ -29,6 +29,7 @@ RUN set -eux \
     sudo locales tzdata ca-certificates \
     iproute2 procps curl jq xz-utils \
     git openssh-server \
+    lsb-release gnupg \
     $DEV_DEPS \
     $BUILD_DEPS \
   \
