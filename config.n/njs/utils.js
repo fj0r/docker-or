@@ -1,12 +1,8 @@
 const fs = require('fs').promises
 
 function main(r) {
-    let u = r.uri.split('/').filter(x=>x.length > 0)
-    if ( u.length > 1 && METHODS[u[1]] ) {
-        METHODS[u[1]](r)
-    } else {
-        r.return(200, JSON.stringify(r))
-    }
+    var f = METHODS[r.variables[1]]
+    f ? f(r) : r.return(200, JSON.stringify({avaiables: Object.keys(METHODS)}))
 }
 
 const METHODS = {
@@ -17,8 +13,8 @@ const METHODS = {
     body    : r => r.return(200, r.requestBuffer),
     version : r => r.return(200, JSON.stringify({ngx: r.variables.nginx_version, njs: njs.version, tz: process.env.TIMEZONE})),
     errorLog: r => fs.readFile('/opt/nginx/logs/error.log').then(data=>r.return(200, data)),
+    r       : r => r.return(200, JSON.stringify(r)),
+    v       : r => r.return(200, JSON.stringify(r.variables[r.args.v])),
 }
-
-const run = () => {}
 
 export default { main }
