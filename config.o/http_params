@@ -6,3 +6,4 @@ proxy_set_header      X-Forwarded-Proto $scheme;
 proxy_connect_timeout 1800s;
 proxy_read_timeout    1800s;
 proxy_send_timeout    1800s;
+client_max_body_size  8M;
