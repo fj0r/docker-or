@@ -87,14 +87,21 @@ RUN set -eux \
   ; websocat_url=https://github.com/${websocat_repo}/releases/download/${websocat_ver}/websocat_amd64-linux-static \
   ; curl -sSLo /usr/local/bin/websocat ${websocat_url} ; chmod +x /usr/local/bin/websocat \
   \
-  ; NGINX_VER=$(curl -sSL -H "'$github_header'" $github_api/${nginx_repo}/tags | jq -r '.[0].name' | cut -c 9-) \
-  ; curl -sSL https://nginx.org/download/nginx-${NGINX_VER}.tar.gz | tar -zxf - \
+  ; build_dir=/root/build \
+  ; mkdir -p $build_dir \
   \
+  ; cd $build_dir \
   ; mkdir njs \
   ; curl -sSL http://hg.nginx.org/njs/archive/tip.tar.gz | tar -zxf - --strip-component=1 -C njs \
   \
+  ; cd $build_dir \
   ; NCHAN_VER=$(curl -sSL -H "'$github_header'" $github_api/${nchan_repo}/tags | jq -r '.[0].name' | cut -c 2-) \
   ; curl -sSL https://github.com/${nchan_repo}/archive/v${NCHAN_VER}.tar.gz | tar -zxf - \
+  \
+  ; cd $build_dir \
+  ; NGINX_VER=$(curl -sSL -H "'$github_header'" $github_api/${nginx_repo}/tags | jq -r '.[0].name' | cut -c 9-) \
+  ; curl -sSL https://nginx.org/download/nginx-${NGINX_VER}.tar.gz | tar -zxf - \
+  \
   ; cd nginx-${NGINX_VER} \
   ; ./configure --prefix=/opt/nginx \
         --with-threads \
@@ -117,7 +124,8 @@ RUN set -eux \
         --add-dynamic-module=../nchan-${NCHAN_VER} \
   ; make \
   ; make install \
-  ; cd .. && rm -rf nginx-${NGINX_VER} nchan-${NCHAN_VER} njs \
+  \
+  ; rm -rf $build_dir \
   ; ln -fs /opt/nginx/conf /etc/nginx \
   ; mkdir -p /etc/nginx/conf.d \
   ; echo 'shopt -s cdable_vars' >> /root/.bashrc \
