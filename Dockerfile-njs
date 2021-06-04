@@ -113,7 +113,7 @@ RUN set -eux \
         --with-stream_ssl_module \
         --with-stream_realip_module \
         --with-stream_ssl_preread_module \
-	    --add-module=../njs/nginx \
+        --add-module=../njs/nginx \
         --add-dynamic-module=../nchan-${NCHAN_VER} \
   ; make \
   ; make install \
