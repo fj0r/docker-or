@@ -21,7 +21,7 @@ ENV BUILD_DEPS software-properties-common build-essential
 
 ENV PATH=/opt/nginx/sbin:$PATH
 
-RUN set -Eeuxo pipefail \
+RUN set -eux \
   ; apt-get update \
   ; apt-get upgrade -y \
   ; DEBIAN_FRONTEND=noninteractive \
