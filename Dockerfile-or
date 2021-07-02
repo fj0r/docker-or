@@ -46,7 +46,7 @@ RUN set -eux \
   ; rg_url=https://github.com/${rg_repo}/releases/download/${rg_ver}/ripgrep-${rg_ver}-x86_64-unknown-linux-musl.tar.gz \
   ; curl -sSL ${rg_url} | tar zxf - -C /usr/local/bin --strip-components=1 ripgrep-${rg_ver}-x86_64-unknown-linux-musl/rg \
   \
-  ; nvim_ver=$(curl -sSL -H "'$github_header'" $github_api/${nvim_repo}/releases | jq -r '.[0].tag_name') \
+  ; nvim_ver=$(curl -sSL -H "'$github_header'" $github_api/${nvim_repo}/releases | jq -r '[.[]|select(.prerelease==false)][0].tag_name') \
   ; nvim_url=https://github.com/${nvim_repo}/releases/download/${nvim_ver}/nvim-linux64.tar.gz \
   ; curl -sSL ${nvim_url} | tar zxf - -C /usr/local --strip-components=1 \
   ; cfg_home=/etc/skel \
