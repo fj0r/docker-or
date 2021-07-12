@@ -1,4 +1,5 @@
-FROM fj0rd/io:foundation
+ARG REPO=fj0rd
+FROM ${REPO}/io:foundation
 
 ARG openresty_repo=openresty/openresty
 ARG nchan_repo=slact/nchan
