@@ -1,5 +1,4 @@
-ARG REPO=fj0rd
-FROM ${REPO}/io:os
+FROM fj0rd/io:os
 
 ARG nginx_repo=nginx/nginx
 ARG nchan_repo=slact/nchan
